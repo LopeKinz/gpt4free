@@ -28,12 +28,16 @@ class Completion:
             'user-agent': UserAgent().random,
         }
 
-        proxies = {'http': 'http://' + proxy, 'https': 'http://' + proxy} if proxy else None
-        
+        proxies = (
+            {'http': f'http://{proxy}', 'https': f'http://{proxy}'}
+            if proxy
+            else None
+        )
+
         options = {}
         if Completion.last_msg_id:
             options['parentMessageId'] = Completion.last_msg_id
-        
+
         requests.post(
             'https://chatbot.theb.ai/api/chat-process',
             headers=headers,
@@ -68,9 +72,5 @@ class Completion:
 
     @staticmethod
     def get_response(prompt: str, proxy: Optional[str] = None) -> str:
-        response_list = []
-        for message in Completion.create(prompt, proxy):
-            response_list.append(message)
+        response_list = list(Completion.create(prompt, proxy))
         return ''.join(response_list)
-        
-        Completion.message_queue.put(response.decode(errors='replace'))

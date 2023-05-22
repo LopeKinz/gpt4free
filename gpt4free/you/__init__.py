@@ -38,7 +38,11 @@ class Completion:
         if chat is None:
             chat = []
 
-        proxies = {'http': 'http://' + proxy, 'https': 'http://' + proxy} if proxy else {}
+        proxies = (
+            {'http': f'http://{proxy}', 'https': f'http://{proxy}'}
+            if proxy
+            else {}
+        )
 
         client = Session(client_identifier='chrome_108')
         client.headers = Completion.__get_headers()
@@ -120,7 +124,7 @@ class Completion:
         retry_on_exception=lambda e: isinstance(e, RequestException),
     )
     def __make_request(client: Session, params: dict) -> Response:
-        response = client.get(f'https://you.com/api/streamingSearch', params=params)
+        response = client.get('https://you.com/api/streamingSearch', params=params)
         if 'youChatToken' not in response.text:
             print('retry')
             raise RequestException('Unable to get the response from server')

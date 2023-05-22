@@ -7,15 +7,18 @@ class Account:
     def create():
         r=requests.get("https://italygpt.it/",headers=Account._header)
         f=r.text
-        tid=re.search('<input type=\"hidden\" name=\"next_id\" id=\"next_id\" value=\"(\w+)\">',f).group(1)
+        tid = re.search(
+            '<input type=\"hidden\" name=\"next_id\" id=\"next_id\" value=\"(\w+)\">',
+            f,
+        )[1]
         if len(tid)==0:
             raise RuntimeError("NetWorkError:failed to get id.")
         else:
             Account._tid=tid
         Account._raw="[]"
         return Account
-    def next(next_id:str)->str:
-        Account._tid=next_id
+    def next(self) -> str:
+        Account._tid = self
         return Account._tid
     def get()->str:
         return Account._tid
@@ -36,8 +39,8 @@ class Account:
             "Cache-Control":"no-cache",
             "TE": "trailers"
         }
-    def settraw(raws:str):
-        Account._raw=raws
+    def settraw(self):
+        Account._raw = self
         return Account._raw
     def gettraw():
         return Account._raw

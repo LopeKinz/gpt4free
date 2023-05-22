@@ -19,7 +19,11 @@ from .typing import ForeFrontResponse, AccountData
 class Account:
     @staticmethod
     def create(proxy: Optional[str] = None, logging: bool = False) -> AccountData:
-        proxies = {'http': 'http://' + proxy, 'https': 'http://' + proxy} if proxy else False
+        proxies = (
+            {'http': f'http://{proxy}', 'https': f'http://{proxy}'}
+            if proxy
+            else False
+        )
 
         start = time()
 
@@ -103,7 +107,11 @@ class StreamingCompletion:
         if not chat_id:
             chat_id = str(uuid4())
 
-        proxies = {'http': 'http://' + proxy, 'https': 'http://' + proxy} if proxy else None
+        proxies = (
+            {'http': f'http://{proxy}', 'https': f'http://{proxy}'}
+            if proxy
+            else None
+        )
         base64_data = b64encode((account_data.user_id + default_persona + chat_id).encode()).decode()
         encrypted_signature = StreamingCompletion.__encrypt(base64_data, account_data.session_id)
 

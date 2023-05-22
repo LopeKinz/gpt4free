@@ -23,12 +23,10 @@ class Completion:
         request = requests.post(url, json=json_data)
         content = request.content
 
-        response = Completion.__load_json(content)
-        return response
+        return Completion.__load_json(content)
 
     @classmethod
     def __load_json(cls, content) -> dict:
         decode_content = str(content.decode("utf-8"))
         split = decode_content.rsplit("\n", 1)[1]
-        to_json = json.loads(split)
-        return to_json
+        return json.loads(split)
